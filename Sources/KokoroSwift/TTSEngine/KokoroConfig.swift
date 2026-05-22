@@ -153,8 +153,15 @@ struct KokoroConfig: Decodable {
   /// - Note: Uses forced unwrapping (try!) as configuration loading is critical
   ///         and should fail fast if the file is missing or malformed
   nonisolated static func loadConfig() -> KokoroConfig {
-    // Locate config.json in the module bundle
-    let fileURL = Bundle.module.url(forResource: "config", withExtension: "json", subdirectory: "Resources")!
+    // Locate config.json in the module bundle. Aria's vendored
+    // Package.swift uses `.process` instead of upstream's
+    // `.copy("../../Resources/")` so the file lands at the bundle
+    // root rather than under a `Resources/` subdirectory — the
+    // iOS codesign tool rejects nested resource directories. The
+    // bundle lookup falls back to the root path when the
+    // subdirectory variant comes up empty.
+    let fileURL = Bundle.module.url(forResource: "config", withExtension: "json", subdirectory: "Resources")
+      ?? Bundle.module.url(forResource: "config", withExtension: "json")!
     
     // Read file contents
     let configJSON = try! String(contentsOf: fileURL, encoding: .utf8)
