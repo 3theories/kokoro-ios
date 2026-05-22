@@ -32,12 +32,15 @@ let package = Package(
     // breaking change. Local-only diff vs upstream.
     .package(url: "https://github.com/ml-explore/mlx-swift", "0.30.0"..<"1.0.0"),
     // .package(url: "https://github.com/mlalma/eSpeakNGSwift", from: "1.0.1"),
-    // Vendored sibling — see ../MisakiSwift. We need its mlx-swift
-    // pin relaxed alongside Kokoro's, so the entire G2P graph
-    // resolves under one MLX version; using `.package(path:)`
-    // routes the import through the local copy instead of fetching
-    // the upstream 1.0.6 tag that still pins exact 0.30.2.
-    .package(path: "../MisakiSwift"),
+    // 3theories fork of MisakiSwift carries the same `Package.swift`
+    // patches as this one (relaxed mlx-swift pin + flattened
+    // resources). Reference by URL with `branch: main` rather than
+    // a tag so both forks evolve together; a future Aria can pin
+    // to a SHA if reproducibility matters. The earlier
+    // `.package(path: "../MisakiSwift")` form only resolved inside
+    // Aria's repo layout — when KokoroSwift is consumed via its
+    // git URL there's no sibling MisakiSwift checkout.
+    .package(url: "https://github.com/3theories/MisakiSwift.git", branch: "main"),
     .package(url: "https://github.com/mlalma/MLXUtilsLibrary.git", "0.0.6"..<"1.0.0")
   ],
   targets: [
