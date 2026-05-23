@@ -40,7 +40,7 @@ let package = Package(
     // `.package(path: "../MisakiSwift")` form only resolved inside
     // Aria's repo layout — when KokoroSwift is consumed via its
     // git URL there's no sibling MisakiSwift checkout.
-    .package(url: "https://github.com/3theories/MisakiSwift.git", branch: "main"),
+    .package(url: "https://github.com/3theories/MisakiSwift.git", from: "0.0.1"),
     .package(url: "https://github.com/mlalma/MLXUtilsLibrary.git", "0.0.6"..<"1.0.0")
   ],
   targets: [
